@@ -42,7 +42,7 @@ jobs:
           toolchain: nightly
 
       - name: Migrate database
-      - run: cargo install --version=0.6.2 sqlx-cli --no-default-features --features postgres
+        run: cargo install --version=0.6.2 sqlx-cli --no-default-features --features postgres
       - run: sqlx database create
       - run: sqlx migrate run
 
