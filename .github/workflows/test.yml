@@ -31,29 +31,35 @@ jobs:
           compose-file: "./docker-compose.yml"
           down-flags: "--volumes"
 
-      - uses: actions/checkout@v2
-      - name: Setup Rust
-        uses: actions-rs/toolchain@v1
+      - uses: actions-rs/toolchain@v1
         with:
-          toolchain: ${{ matrix.rust }}
-          override: true
-
-      - name: Setup cargo-make
-        uses: davidB/rust-cargo-make@v1
-
-      - name: Cargo generate-lockfile
-        run: cargo generate-lockfile
-
-      - name: Cargo cache
-        uses: actions/cache@v3
+          toolchain: nightly
+      - uses: actions-rs/cargo@v1
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ matrix.rust }}-${{ hashFiles('**/Cargo.lock') }}
+          command: test
 
-      - name: Run tests with all features
-        run: cargo make ci
+      # - name: Setup Rust
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     toolchain: ${{ matrix.rust }}
+      #     override: true
+
+      # - name: Setup cargo-make
+      #   uses: davidB/rust-cargo-make@v1
+
+      # - name: Cargo generate-lockfile
+      #   run: cargo generate-lockfile
+
+      # - name: Cargo cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/.cargo/bin/
+      #       ~/.cargo/registry/index/
+      #       ~/.cargo/registry/cache/
+      #       ~/.cargo/git/db/
+      #       target/
+      #     key: ${{ runner.os }}-cargo-${{ matrix.rust }}-${{ hashFiles('**/Cargo.lock') }}
+
+      # - name: Run tests with all features
+      #   run: cargo make ci
