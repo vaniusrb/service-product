@@ -19,47 +19,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout project
-      uses: actions/checkout@v3
+      - name: Checkout project
+        uses: actions/checkout@v3
 
-    # https://github.com/marketplace/actions/create-env-file
-    - name: Make envfile
-      uses: SpicyPizza/create-envfile@v1.3
-      with:
-        envkey_POSTGRES_PASSWORD: password
-        envkey_DATABASE_URL: postgres://postgres:password@127.0.0.1/product
+      # https://github.com/marketplace/actions/create-env-file
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_POSTGRES_PASSWORD: password
+          envkey_DATABASE_URL: postgres://postgres:password@127.0.0.1/product
 
-    # https://github.com/marketplace/actions/docker-compose-action
-    - name: Start database container
-      uses: isbang/compose-action@v1.4.1
-      with:
-        compose-file: "./docker-compose.yml"
-        down-flags: "--volumes"
+      # https://github.com/marketplace/actions/docker-compose-action
+      - name: Start database container
+        uses: isbang/compose-action@v1.4.1
+        with:
+          compose-file: "./docker-compose.yml"
+          down-flags: "--volumes"
 
-    - name: Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: nightly
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
 
-    - name: Migrate database
-      run: cargo install --version=0.6.2 sqlx-cli --no-default-features --features postgres
-      run: sqlx database create
-      run: sqlx migrate run
+      - name: Migrate database
+      - run: cargo install --version=0.6.2 sqlx-cli --no-default-features --features postgres
+      - run: sqlx database create
+      - run: sqlx migrate run
 
-    - name: Cargo cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cargo/bin/
-          ~/.cargo/registry/index/
-          ~/.cargo/registry/cache/
-          ~/.cargo/git/db/
-          target/
+      - name: Cargo cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
 
-    - name: Execute test
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
+      - name: Execute test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
 
     # - name: Setup Rust
     #   uses: actions-rs/toolchain@v1
