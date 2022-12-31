@@ -42,13 +42,11 @@ jobs:
           compose-file: "./docker-compose.yml"
           down-flags: "--volumes"
 
-      - name: Migrate database
+      - name: Migrate database and execute test
         run: |
           cargo install --version=0.6.2 sqlx-cli --no-default-features --features postgres
           sqlx database create
           sqlx migrate run
-
-      - name: Execute test
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
