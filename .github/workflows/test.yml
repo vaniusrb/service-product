@@ -23,14 +23,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Make envfile
-        # https://github.com/marketplace/actions/create-env-file
         uses: SpicyPizza/create-envfile@v1.3
         with:
           envkey_POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
           envkey_DATABASE_URL: ${{ env.DATABASE_URL }}
 
-      - name: Start database container
-        # https://github.com/marketplace/actions/docker-compose-action
+      - name: Database container
         uses: isbang/compose-action@v1.4.1
         with:
           compose-file: "./docker-compose.yml"
@@ -63,29 +61,3 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-
-    # - name: Setup Rust
-    #   uses: actions-rs/toolchain@v1
-    #   with:
-    #     toolchain: ${{ matrix.rust }}
-    #     override: true
-
-    # - name: Setup cargo-make
-    #   uses: davidB/rust-cargo-make@v1
-
-    # - name: Cargo generate-lockfile
-    #   run: cargo generate-lockfile
-
-    # - name: Cargo cache
-    #   uses: actions/cache@v3
-    #   with:
-    #     path: |
-    #       ~/.cargo/bin/
-    #       ~/.cargo/registry/index/
-    #       ~/.cargo/registry/cache/
-    #       ~/.cargo/git/db/
-    #       target/
-    #     key: ${{ runner.os }}-cargo-${{ matrix.rust }}-${{ hashFiles('**/Cargo.lock') }}
-
-    # - name: Run tests with all features
-    #   run: cargo make ci
