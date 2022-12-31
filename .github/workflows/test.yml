@@ -41,11 +41,6 @@ jobs:
         with:
           toolchain: nightly
 
-      - name: Migrate database
-        run: cargo install --version=0.6.2 sqlx-cli --no-default-features --features postgres,runtime-tokio-rustls
-      - run: sqlx database create
-      - run: sqlx migrate run
-
       - name: Cargo cache
         uses: actions/cache@v3
         with:
@@ -55,6 +50,11 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
+
+      - name: Migrate database
+        run: cargo install --version=0.6.2 sqlx-cli
+      - run: sqlx database create
+      - run: sqlx migrate run
 
       - name: Execute test
         uses: actions-rs/cargo@v1
