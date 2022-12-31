@@ -43,13 +43,13 @@ jobs:
           down-flags: "--volumes"
 
       - name: Migrate database and execute test
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
         run: |
           cargo install --version=0.6.2 sqlx-cli --no-default-features --features postgres
           sqlx database create
           sqlx migrate run
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
       - uses: actions-rs/cargo@v1
         with:
           command: test
